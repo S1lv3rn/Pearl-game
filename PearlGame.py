@@ -20,14 +20,11 @@ clamC = pygame.image.load('arts/clamClose.png')
 clamE = pygame.image.load('arts/clamEmpty.png')
 clamF = pygame.image.load('arts/clamFull.png')
 
-car_width = 85
+#car_width = 85
 
-def checkClam():
+#def checkClam():
     #this method will check the
 
-def things(thingx,thingy,thingw,thingh,color):
-    #this places thing in world
-    pygame.draw.rect(gameDisplay,color,[thingx,thingy,thingw,thingh])
 
 def things_won(count):
     font = pygame.font.SysFont(None, 25)
