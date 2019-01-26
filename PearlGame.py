@@ -1,24 +1,21 @@
-import pygame
-import time
-import random
+import pygame, time, random
+from clamObj import Clam
+
 
 pygame.init()
-display_width = 800
-display_height = 600
+display_width = 700
+display_height = 400
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
 RED = (255,0,0)
 
-#clam coords
-
-
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Pearl Game')
 clock = pygame.time.Clock()
-clamC = pygame.image.load('arts/clamClose.png')
-clamE = pygame.image.load('arts/clamEmpty.png')
-clamF = pygame.image.load('arts/clamFull.png')
+
+
+
 
 #car_width = 85
 
@@ -46,22 +43,17 @@ def messageDisplay(text):
     time.sleep(1)
     gameLoop()
 
-def clam(x,y):
+def clam(x,y,img):
     #this puts clams on screen
-    gameDisplay.blit(clamC, (x,y))
+    gameDisplay.blit(img, (x,y))
 
 
 
 def gameLoop():
     #this is the main game gameLoop
     #starts constants, quitting, game display updates
-    x1 = (display_width * 0.25) #coords for player
-    x2 = (display_width * 0.5)
-    x3 = (display_width * 0.75)
 
-    xArr = [x1, x2, x3]
 
-    y = (display_height * 0.8)
 #    x_change = 0
 #    thingStartx = random.randrange(0, display_width)
 #    thingStarty = -600
@@ -69,8 +61,14 @@ def gameLoop():
 #    thingWidth = 100
 #    thingHeight = 100
 
-    money = 0
+    sprList = pygame.sprite.Group()
+    c1am1 = Clam(False)
+    #print(clam1)
+    clam1.rect.x = (display_width * 0.5)
+    clam1.rect.y = (display_height * 0.75)
+    sprList.add(clam1)
 
+    money = 0
     gameExit = False
 
     while not gameExit:
@@ -78,19 +76,26 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = event.pos
+ 
+                for sprite in sprList:
+                   if sprite.rect.collidepoint(pos): 
+                         print("OPEN")
+                         sprite.change()
+                         
+                         
 
 
             print(event)
-
-
         gameDisplay.fill(WHITE)
-        for x in xArr:
-            car(x,y)
-
+        
+        sprList.update()
         things_won(money)
-
-
+        
         pygame.display.update()
+
+        
         clock.tick(60)
 
 gameLoop()
