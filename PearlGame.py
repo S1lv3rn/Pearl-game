@@ -62,8 +62,8 @@ def gameLoop():
 #    thingHeight = 100
 
     sprList = pygame.sprite.Group()
-    c1am1 = Clam(False)
-    #print(clam1)
+    clam1 = Clam(False)
+
     clam1.rect.x = (display_width * 0.5)
     clam1.rect.y = (display_height * 0.75)
     sprList.add(clam1)
@@ -78,24 +78,25 @@ def gameLoop():
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = event.pos
- 
+
                 for sprite in sprList:
-                   if sprite.rect.collidepoint(pos): 
+                   if sprite.rect.collidepoint(pos):
                          print("OPEN")
                          sprite.change()
-                         
-                         
+
+
 
 
             print(event)
         gameDisplay.fill(WHITE)
-        
+
         sprList.update()
+        sprList.draw(gameDisplay)
         things_won(money)
-        
+
         pygame.display.update()
 
-        
+
         clock.tick(60)
 
 gameLoop()
