@@ -23,4 +23,4 @@ class Clam(pygame.sprite.Sprite):
             self.image = clamF.convert_alpha()
         else:
             self.image = clamE.convert_alpha()
-        self.rect = self.image.get_rect()
+        #self.rect = self.image.get_rect()
