@@ -21,9 +21,9 @@ clock = pygame.time.Clock()
 
 
 
-def things_won(count):
+def things_won(count, lf):
     font = pygame.font.SysFont(None, 25)
-    text = font.render("Money: " + str(count), True, ORE)
+    text = font.render("Money: " + str(count) + "  Life: " + str(lf), True, ORE)
     gameDisplay.blit(text, (0,0))
 
 
@@ -57,9 +57,9 @@ def clam(x, y, full, splist):
 
 def getClamPos(lv, sList):
     #this will num and pos of clams needed, call create clam and return list
-    num = 2 + (lv % 3)
+    num = 2 + int(lv / 3)
 
-    print("MOD: ",lv%3)
+    print("MOD: ",int(lv/3))
 
     #checking for too many
     if (num*100 + (num-1)*20 > display_width):
@@ -80,7 +80,11 @@ def getClamPos(lv, sList):
 
             print("POS: (",x,",",y,")")
             clam(x, y, i==ran, sList)
-        
+
+def endGame():
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Game Over", True, WHITE)
+    gameDisplay.blit(text, ((display_height/2), (display_width/2)))
 
 
 def gameLoop():
@@ -89,42 +93,53 @@ def gameLoop():
 
     lvl = 1
     sprList = pygame.sprite.Group()
-    getClamPos(lvl, sprList)
 
     money = 0
+    life = 3
     gameExit = False
+    alive = True
+    getClamPos(lvl, sprList)
 
     while not gameExit:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = event.pos
+        while not alive:
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = event.pos
  
-                for sprite in sprList:
-                   if sprite.rect.collidepoint(pos): 
-                         print("OPEN")
-                         sprite.change()
-                         #stuff happens here
+                    for sprite in sprList:
+                        if sprite.rect.collidepoint(pos): 
+                            print("OPEN")
+                            if sprite.open == False:
+                                sprite.change()
+                             
+                                if sprite.full:
+                                    money += 1
+                                    if (lvl%2 == 0):
+                                        life += 1
+                                        getClamPos(lvl, sprList)
+                                else:
+                                    life -= 1
+                                    if life == 0:
+                                        alive = False
                          
-                         
-
-
-            print(event)
+                print(event)
                 
+            #change bg colour
+            gameDisplay.fill(BLUE)
+        
+            sprList.update()
+            sprList.draw(gameDisplay)
+            things_won(money, life)
+        
+            pygame.display.update()
+        
+            clock.tick(60)
 
-        #change bg colour
-        gameDisplay.fill(BLUE)
-        
-        sprList.update()
-        sprList.draw(gameDisplay)
-        things_won(money)
-        
-        pygame.display.update()
-
-        
-        clock.tick(60)
+        endGame()
 
 gameLoop()
 pygame.quit()

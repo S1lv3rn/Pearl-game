@@ -16,9 +16,11 @@ class Clam(pygame.sprite.Sprite):
  
         self.rect = self.image.get_rect()
         self.full = isFull
+        self.open = False
 
     def change(self):
         #add sound here
+        self.open = True
         if self.full:
             self.image = clamF.convert_alpha()
         else:
